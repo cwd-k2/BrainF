@@ -1,15 +1,20 @@
-module Machine where
+module Machine
+  ( Machine
+  , initial
+  , run
+  ) where
 
 import           Control.Monad.State
 import           Data.Vector.Unboxed (Vector, (!))
 import qualified Data.Vector.Unboxed as V
-import           Memory              (Memory, cur, dec, inc, ins, nex, pre)
+import           Memory              (Memory)
 import qualified Memory              as M
 import           System.IO           (hFlush, stdout)
 
 -- | メモリ, スタック (直前の '[' の位置のリスト)
 type Machine = (Memory , [Int])
 
+-- | 初期状態
 initial :: Machine
 initial = (M.initial, [])
 
@@ -69,7 +74,7 @@ jump p = do
 output :: Int -> StateT Machine IO Int
 output p = do
   (mem, stack) <- get
-  liftIO $ putChar (cur mem) >> hFlush stdout
+  liftIO $ putChar (M.cur mem) >> hFlush stdout
   return $ p + 1
 
 commit :: Int -> StateT Machine IO Int

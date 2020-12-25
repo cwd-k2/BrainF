@@ -30,18 +30,21 @@ dec = Memory <$> back <*> (pred . current) <*> forward
 ins :: Enum e => Memory -> e -> Memory
 ins mem chr = Memory (back mem) (fromEnum chr) (forward mem)
 
+-- | 現在位置を次に
 nex :: Memory -> Memory
 nex mem = Memory (c:bs) f fs
   where bs   = back mem
         c    = current mem
         f:fs = forward mem
 
+-- | 現在位置を前に
 pre :: Memory -> Memory
 pre mem = Memory bs b (c:fs)
   where b:bs = back mem
         c    = current mem
         fs   = forward mem
 
+-- | 現在位置の値を返す
 cur :: Enum e => Memory -> e
 cur = toEnum . current
 

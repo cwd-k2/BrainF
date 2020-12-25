@@ -13,6 +13,7 @@ author:         cwd-k2
 maintainer:     kaito.augmented7th@google.com
 copyright:      2020 Author cwd-k2
 license:        MIT
+license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
