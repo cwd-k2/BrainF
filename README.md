@@ -19,7 +19,7 @@ stack test
 ## Run
 
 ```sh
-stack exec BrainF
+stack exec BrainF <filename>
 ```
 
 または, `stack install` 済みであり, `PATH` の通ったところに置かれていれば次.
