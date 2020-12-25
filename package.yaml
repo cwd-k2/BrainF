@@ -1,0 +1,51 @@
+name:                BrainF
+version:             0.0.0.0
+github:              "cwd-k2/BrainF"
+license:             MIT
+author:              "cwd-k2"
+maintainer:          "kaito.augmented7th@google.com"
+copyright:           "2020 Author cwd-k2"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/cwd-k2/BrainF#readme>
+
+dependencies:
+- base           >= 4.7 && < 5
+- mtl            >= 2
+- text
+- vector
+
+library:
+  source-dirs: src
+
+executables:
+  BrainF:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - BrainF
+
+tests:
+  BrainF-Machine:
+    main:                Main.hs
+    source-dirs:         test/Machine
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - BrainF
