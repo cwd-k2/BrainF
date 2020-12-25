@@ -9,7 +9,6 @@ import           Data.Vector.Unboxed (Vector, (!))
 import qualified Data.Vector.Unboxed as V
 import           Memory              (Memory)
 import qualified Memory              as M
-import           System.IO           (hFlush, stdout)
 
 -- | メモリ, スタック (直前の '[' の位置のリスト)
 type Machine = (Memory, [Int])
@@ -77,7 +76,7 @@ jump p = do
 output :: Int -> StateT Machine IO Int
 output p = do
   (mem, stack) <- get
-  liftIO $ putChar (M.cur mem) >> hFlush stdout
+  liftIO . putChar $ M.cur mem
   return $ p + 1
 
 commit :: Int -> StateT Machine IO Int
