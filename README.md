@@ -47,5 +47,5 @@ BrainF examples/echo.bf
 環境変数 `BF_NO_BUFFERING` に何らかの値がセットされていれば入出力に関してバッファリングをしないようにしてある. わざわざ入力を確定するのに Enter 押下しないようにできる.
 
 ```sh
-BF_NO_BUFFERING=1 BrainF <foobar.bf>
+BF_NO_BUFFERING=1 BrainF foobar.bf
 ```
