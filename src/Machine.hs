@@ -12,49 +12,54 @@ import qualified Memory              as M
 import           System.IO           (hFlush, stdout)
 
 -- | メモリ, スタック (直前の '[' の位置のリスト)
-type Machine = (Memory , [Int])
+type Machine = (Memory, [Int])
 
 -- | 初期状態
 initial :: Machine
 initial = (M.initial, [])
 
 run :: Vector Char -> Int -> StateT Machine IO ()
-run v p | p == len  = return ()
-        | c == '>'  = next p >>= run v
-        | c == '<'  = back p >>= run v
-        | c == '+'  = increment p >>= run v
-        | c == '-'  = decrement p >>= run v
-        | c == '['  = push p >>= run v
-        | c == ']'  = jump p >>= run v
-        | c == '.'  = output p >>= run v
-        | c == ','  = commit p >>= run v
-        | otherwise = run v (p + 1)
-  where c   = v ! p
-        len = V.length v
+run v p
+  | p == l    = return ()
+  | otherwise = switch c p >>= run v
+  where
+    c = v ! p
+    l = V.length v
 
-internal :: (Memory -> Memory) -> StateT Machine IO ()
-internal f = do
+switch :: Char -> Int -> StateT Machine IO Int
+switch '>' = next
+switch '<' = back
+switch '+' = increment
+switch '-' = decrement
+switch '[' = push
+switch ']' = jump
+switch '.' = output
+switch ',' = commit
+switch _   = return . (+ 1)
+
+updateMemoryWith :: (Memory -> Memory) -> StateT Machine IO ()
+updateMemoryWith f = do
   (mem, stack) <- get
   put (f mem, stack)
 
 next :: Int -> StateT Machine IO Int
 next p = do
-  internal M.nex
+  updateMemoryWith M.nex
   return $ p + 1
 
 back :: Int -> StateT Machine IO Int
 back p = do
-  internal M.pre
+  updateMemoryWith M.pre
   return $ p + 1
 
 increment :: Int -> StateT Machine IO Int
 increment p = do
-  internal M.inc
+  updateMemoryWith M.inc
   return $ p + 1
 
 decrement :: Int -> StateT Machine IO Int
 decrement p = do
-  internal M.dec
+  updateMemoryWith M.dec
   return $ p + 1
 
 push :: Int -> StateT Machine IO Int
@@ -67,9 +72,7 @@ jump :: Int -> StateT Machine IO Int
 jump p = do
   (mem, q:stack) <- get
   put (mem, stack)
-  case M.cur mem of
-    0 -> return $ p + 1
-    _ -> return q
+  return $ if M.cur mem == 0 then p + 1 else q
 
 output :: Int -> StateT Machine IO Int
 output p = do
