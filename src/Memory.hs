@@ -10,13 +10,13 @@ module Memory
   ) where
 
 -- | メモリ 左, 現在, 右
-data Memory = Memory { back    :: [Int]
-                     , current :: Int
-                     , forward :: [Int] }
+data Memory = Memory { back    :: [Char]
+                     , current :: Char
+                     , forward :: [Char] }
 
 -- | 初期状態
 initial :: Memory
-initial = Memory (repeat 0) 0 (repeat 0)
+initial = Memory <$> repeat <*> id <*> repeat $ toEnum 0
 
 -- | 現在位置の値を increment
 inc :: Memory -> Memory
@@ -27,8 +27,8 @@ dec :: Memory -> Memory
 dec = Memory <$> back <*> (pred . current) <*> forward
 
 -- | 現在位置に値を代入
-ins :: Enum e => Memory -> e -> Memory
-ins mem val = Memory (back mem) (fromEnum val) (forward mem)
+ins :: Char -> Memory -> Memory
+ins val mem = Memory (back mem) val (forward mem)
 
 -- | 現在位置を次に
 nex :: Memory -> Memory
@@ -47,6 +47,6 @@ pre mem = Memory bs b (c:fs)
     fs   = forward mem
 
 -- | 現在位置の値を返す
-cur :: Enum e => Memory -> e
-cur = toEnum . current
+cur :: Memory -> Char
+cur = current
 

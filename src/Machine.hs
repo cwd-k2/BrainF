@@ -70,8 +70,12 @@ push p = do
 jump :: Int -> StateT Machine IO Int
 jump p = do
   (mem, q:stack) <- get
-  put (mem, stack)
-  return $ if M.cur mem == 0 then p + 1 else q
+  if fromEnum (M.cur mem) == 0
+    then do
+      put (mem, stack)
+      return $ p + 1
+    else
+      return $ q + 1
 
 output :: Int -> StateT Machine IO Int
 output p = do
@@ -81,8 +85,7 @@ output p = do
 
 commit :: Int -> StateT Machine IO Int
 commit p = do
-  (mem, stack) <- get
   char <- liftIO getChar
-  put (M.ins mem char, stack)
+  updateMemoryWith $ M.ins char
   return $ p + 1
 
