@@ -1,11 +1,12 @@
 module Main where
 
-import           Control.Monad.State
-import           Data.Maybe          (isJust)
-import qualified Data.Vector.Unboxed as V
-import qualified Machine             as M
-import           System.Environment  (getArgs, lookupEnv)
+import           Control.Monad      (when)
+import           Data.Maybe         (isJust)
+import           System.Environment (getArgs, lookupEnv)
 import           System.IO
+
+import qualified BrainF.Memory      as M
+import qualified BrainF.Program     as P
 
 main :: IO ()
 main = do
@@ -25,8 +26,8 @@ main = do
   handle   <- openFile filename ReadMode
   contents <- hGetContents handle
 
-  let program = V.fromList contents
-  evalStateT (M.run program 0) M.initial
+  P.run (P.parse contents) M.initial
 
   hClose handle
 
+  return ()

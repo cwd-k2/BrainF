@@ -20,9 +20,7 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/cwd-k2/BrainF#readme>
 
 dependencies:
-- base           >= 4.7 && < 5
-- mtl            >= 2
-- vector
+- base           >= 4.14 && < 5
 
 library:
   source-dirs: src
@@ -39,9 +37,9 @@ executables:
     - BrainF
 
 tests:
-  BrainF-Machine:
-    main:                Main.hs
-    source-dirs:         test/Machine
+  test-BrainF:
+    main:                Spec.hs
+    source-dirs:         test
     ghc-options:
     - -threaded
     - -rtsopts
