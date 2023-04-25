@@ -5,6 +5,7 @@ import           Data.Maybe         (isJust)
 import           System.Environment (getArgs, lookupEnv)
 import           System.IO
 
+import qualified BrainF.Machine     as B
 import qualified BrainF.Memory      as M
 import qualified BrainF.Program     as P
 
@@ -26,7 +27,7 @@ main = do
   handle   <- openFile filename ReadMode
   contents <- hGetContents handle
 
-  P.run (P.parse contents) M.initial
+  B.run getChar putChar (P.parse contents) M.initial
 
   hClose handle
 

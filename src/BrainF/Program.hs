@@ -2,7 +2,6 @@ module BrainF.Program
   ( Program
   , Instruction(..)
   , parse
-  , run
   ) where
 
 import           Control.Monad          (foldM, when)
@@ -46,22 +45,4 @@ loopEnd = go 0 1 where
     | c == '['  = go (i + 1) (nest + 1) cs
     | c == ']'  = go (i + 1) (nest - 1) cs
     | otherwise = go (i + 1) nest cs
-
-eval :: MonadIO m => Instruction -> Memory -> m Memory
-eval Increment m = return $ M.increment m
-eval Decrement m = return $ M.decrement m
-eval Forward   m = return $ M.step m
-eval Backward  m = return $ M.back m
-eval (Loop p) m
-  | M.current m /= toEnum 0 = run p m >>= eval (Loop p)
-  | otherwise               = return m
-eval Input m     = do
-  c <- liftIO getChar
-  return $ M.replace c m
-eval Output m    = do
-  liftIO $ putChar (M.current m)
-  return m
-
-run :: MonadIO m => Program -> Memory -> m Memory
-run p m = foldM (flip eval) m p
 

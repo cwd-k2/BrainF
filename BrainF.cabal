@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      BrainF.Machine
       BrainF.Memory
       BrainF.Program
   other-modules:
